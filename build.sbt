@@ -16,6 +16,7 @@ lazy val root = (project in file(".")).
       jodaTime,
       uniRest,
       superCSV,
+      avro2s,
       scalaTest % Test,
       spec2 % Test)
   )

@@ -7,4 +7,5 @@ object Dependencies {
   lazy val uniRest = "com.mashape.unirest" % "unirest-java" % "1.4.9"
   lazy val superCSV = "net.sf.supercsv" % "super-csv-joda" % "2.4.0"
   lazy val spec2 = "org.specs2" %% "specs2-core" % "3.8.7"
+  lazy val avro2s = "com.sksamuel.avro4s" %% "avro4s-core" % "1.6.4"
 }

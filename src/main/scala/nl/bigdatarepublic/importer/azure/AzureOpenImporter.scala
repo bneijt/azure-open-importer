@@ -24,6 +24,7 @@ object AzureOpenImporter extends App {
     .throttle(1, 1.second, 1, ThrottleMode.shaping)
     .map(Knmi.downloadHourlyMeasurements)
     .map(Knmi.hourlyMeasurementsAsObjects)
+    .map(Knmi.toAvro)
     .runForeach(println)
   (materializer)
 }
