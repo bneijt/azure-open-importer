@@ -18,12 +18,12 @@ object AzureOpenImporter extends App {
   implicit val materializer = ActorMaterializer()
   val dateSource = new DateSource(DateTime.now().minusDays(2))
   val source: Source[DateTime, NotUsed] = Source[DateTime](dateSource)
-//  source.runForeach(i => println(i))
+  //  source.runForeach(i => println(i))
 
-    val knmi: Future[Done] = source
-      .throttle(1, 1.second, 1, ThrottleMode.shaping)
-      .map(Knmi.downloadHourlyMeasurements)
-        .map(Knmi.hourlyMeasurementsAsAvro)
-      .runForeach(println)
+  val knmi: Future[Done] = source
+    .throttle(1, 1.second, 1, ThrottleMode.shaping)
+    .map(Knmi.downloadHourlyMeasurements)
+    .map(Knmi.hourlyMeasurementsAsObjects)
+    .runForeach(println)
   (materializer)
 }
