@@ -18,13 +18,10 @@ import scala.collection.JavaConverters._
 
 object Knmi {
 
-
   val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd")
-
-
-
-  def toAvroFile(hourlyMeasurements: HourlyMeasurements): String = {
-    val outputFilename = dateFormatter.print(hourlyMeasurements.date) + ".avro"
+  
+  def toAvroFile(basePath : String, hourlyMeasurements: HourlyMeasurements): String = {
+    val outputFilename = new File(basePath, dateFormatter.print(hourlyMeasurements.date) + ".avro").toString
     val os = AvroOutputStream.data[HourlyMeasurement](new File(outputFilename))
     try {
       os.write(hourlyMeasurements.measurements)
@@ -41,6 +38,19 @@ object Knmi {
       .field("start", dateTimeString)
       .field("end", dateTimeString)
       .asString().getBody())
+  }
+
+  def intOf(value : String): Int = {
+    if (value.trim.isEmpty) null.asInstanceOf[Int] else value.trim.toInt
+  }
+
+  def booleanOf(value: String) : Boolean = {
+    if (value == null || value.trim.isEmpty) {
+      return null.asInstanceOf[Boolean]
+    }
+    if("0".equals(value)) return false
+    if("1".equals(value)) return true
+    value.trim.toBoolean
   }
 
   def hourlyMeasurementsAsObjects(t: Tuple2[DateTime, String]): HourlyMeasurements = {
@@ -62,30 +72,30 @@ object Knmi {
           .map(_.map(x => if (x != null) x.trim else x))
           .map(line => HourlyMeasurement(
             line(0),
-            line(1),
-            line(2),
-            line(3),
-            line(4),
-            line(5),
-            line(6),
-            line(7),
-            line(8),
-            line(9),
-            line(10),
-            line(11),
-            line(12),
-            line(13),
-            line(14),
-            line(15),
-            line(16),
-            line(17),
-            line(18),
-            line(19),
-            line(20),
-            line(21),
-            line(22),
-            line(23),
-            line(24)
+            intOf(line(1)),
+            intOf(line(2)),
+              intOf(line(3)),
+            intOf(line(4)),
+            intOf(line(5)),
+              intOf(line(6)),
+            intOf(line(7)),
+            intOf(line(8)),
+            intOf(line(9)),
+            intOf(line(10)),
+            intOf(line(11)),
+            intOf(line(12)),
+            intOf(line(13)),
+            intOf(line(14)),
+            intOf(line(15)),
+            intOf(line(16)),
+            intOf(line(17)),
+            intOf(line(18)),
+              intOf(line(19)),
+            booleanOf(line(20)),
+            booleanOf(line(21)),
+              booleanOf(line(22)),
+                booleanOf(line(23)),
+                  booleanOf(line(24))
           )).toList
       )
     } finally {

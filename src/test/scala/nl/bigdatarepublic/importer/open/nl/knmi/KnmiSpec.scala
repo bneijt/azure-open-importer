@@ -11,4 +11,5 @@ class KnmiSpec extends org.specs2.mutable.Specification {
     Knmi.hourlyMeasurementsAsObjects(Tuple2(DateTime.now(), source)).measurements.head.STN must beEqualTo("391")
   }
 
+
 }
