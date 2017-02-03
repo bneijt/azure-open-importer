@@ -17,6 +17,7 @@ lazy val root = (project in file(".")).
       uniRest,
       superCSV,
       avro2s,
+      azureStorage,
       scalaTest % Test,
       spec2 % Test)
   )

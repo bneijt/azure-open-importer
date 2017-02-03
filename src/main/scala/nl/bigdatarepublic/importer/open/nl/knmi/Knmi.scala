@@ -21,7 +21,9 @@ object Knmi {
 
   val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd")
 
-  def toAvro(hourlyMeasurements: HourlyMeasurements): HourlyMeasurements = {
+
+
+  def toAvroFile(hourlyMeasurements: HourlyMeasurements): String = {
     val outputFilename = dateFormatter.print(hourlyMeasurements.date) + ".avro"
     val os = AvroOutputStream.data[HourlyMeasurement](new File(outputFilename))
     try {
@@ -29,7 +31,7 @@ object Knmi {
     } finally {
       os.close()
     }
-    hourlyMeasurements
+    outputFilename
   }
 
   def downloadHourlyMeasurements(downloadDate: DateTime): Tuple2[DateTime, String]  = {

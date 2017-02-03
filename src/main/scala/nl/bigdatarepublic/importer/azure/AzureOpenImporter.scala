@@ -21,10 +21,11 @@ object AzureOpenImporter extends App {
   //  source.runForeach(i => println(i))
 
   val knmi: Future[Done] = source
-    .throttle(1, 1.second, 1, ThrottleMode.shaping)
+    .throttle(1, 10.second, 1, ThrottleMode.shaping)
     .map(Knmi.downloadHourlyMeasurements)
     .map(Knmi.hourlyMeasurementsAsObjects)
-    .map(Knmi.toAvro)
+    .map(Knmi.toAvroFile)
+    .map(AzureStorage.uploadFile("knmi/hourly", _))
     .runForeach(println)
   (materializer)
 }
